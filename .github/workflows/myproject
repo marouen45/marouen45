@@ -1,0 +1,219 @@
+import React, { useState } from 'react';
+import { 
+  Box, 
+  Container, 
+  Typography, 
+  Paper,
+  Grid,
+  Card,
+  CardContent,
+  Button,
+  BottomNavigation,
+  BottomNavigationAction,
+  Badge,
+  IconButton,
+  Avatar
+} from '@mui/material';
+import { colors } from '../theme/colors';
+import HomeIcon from '@mui/icons-material/Home';
+import MapIcon from '@mui/icons-material/Map';
+import MessageIcon from '@mui/icons-material/Message';
+import PersonIcon from '@mui/icons-material/Person';
+import QrCodeIcon from '@mui/icons-material/QrCode';
+import { useNavigate } from 'react-router-dom';
+import { QRCodeSVG } from 'qrcode.react';
+
+const QRCodePage: React.FC = () => {
+  const navigate = useNavigate();
+  const [value, setValue] = useState(0);
+  
+  // Simuler un identifiant unique pour le QR code
+  const qrCodeData = JSON.stringify({
+    parentId: "P12345",
+    name: "Marie Dubois",
+    childId: "C67890",
+    childName: "Lucas Dubois",
+    school: "École Jean Moulin",
+    timestamp: new Date().toISOString()
+  });
+
+  return (
+    <Box sx={{ pb: 7, backgroundColor: colors.background.light, minHeight: '100vh' }}>
+      {/* Header */}
+      <Paper 
+        elevation={0} 
+        sx={{ 
+          p: 2, 
+          backgroundColor: colors.primary.main,
+          borderRadius: '0 0 16px 16px',
+          mb: 2
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box 
+              component="img"
+              src="/assets/logo.svg"
+              alt="ParentRelais Logo"
+              sx={{ width: 40, height: 40, mr: 1 }}
+            />
+            <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
+              QR Code d'identification
+            </Typography>
+          </Box>
+          <IconButton onClick={() => navigate('/profile')}>
+            <Avatar sx={{ width: 36, height: 36, bgcolor: colors.secondary.main }}>M</Avatar>
+          </IconButton>
+        </Box>
+      </Paper>
+      
+      <Container>
+        <Typography variant="h5" sx={{ mb: 3, fontWeight: 600, textAlign: 'center' }}>
+          Présentez ce QR code à l'école
+        </Typography>
+        
+        <Typography variant="body1" sx={{ mb: 4, textAlign: 'center', color: colors.text.secondary }}>
+          Ce QR code permet de vous identifier comme personne autorisée à récupérer un enfant
+        </Typography>
+        
+        <Card 
+          sx={{ 
+            p: 4, 
+            mb: 4, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center',
+            backgroundColor: colors.background.paper
+          }}
+        >
+          <Box 
+            sx={{ 
+              p: 3, 
+              backgroundColor: 'white', 
+              borderRadius: 2,
+              boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.05)',
+              mb: 3
+            }}
+          >
+            <QRCodeSVG 
+              value={qrCodeData} 
+              size={200}
+              level="H"
+              includeMargin={true}
+            />
+          </Box>
+          
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+            Marie Dubois
+          </Typography>
+          
+          <Typography variant="body1" sx={{ color: colors.text.secondary, mb: 3 }}>
+            Autorisée à récupérer : Lucas Dubois
+          </Typography>
+          
+          <Button 
+            variant="outlined" 
+            color="primary" 
+            startIcon={<QrCodeIcon />}
+          >
+            Actualiser le QR code
+          </Button>
+        </Card>
+        
+        <Card sx={{ mb: 4, backgroundColor: colors.accent.yellow + '30' }}>
+          <CardContent>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+              Important
+            </Typography>
+            <Typography variant="body2">
+              Ce QR code est personnel et ne doit pas être partagé. Il sera scanné par le personnel de l'école pour confirmer votre identité lors de la récupération d'un enfant.
+            </Typography>
+          </CardContent>
+        </Card>
+        
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+          Instructions
+        </Typography>
+        
+        <Card sx={{ mb: 4 }}>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="body1" sx={{ mb: 1, fontWeight: 600 }}>
+                  1. Arrivez à l'école
+                </Typography>
+                <Typography variant="body2" sx={{ color: colors.text.secondary, mb: 2 }}>
+                  Présentez-vous à l'accueil de l'école à l'heure convenue.
+                </Typography>
+              </Grid>
+              
+              <Grid item xs={12}>
+                <Typography variant="body1" sx={{ mb: 1, fontWeight: 600 }}>
+                  2. Montrez votre QR code
+                </Typography>
+                <Typography variant="body2" sx={{ color: colors.text.secondary, mb: 2 }}>
+                  Présentez ce QR code au personnel de l'école pour qu'il soit scanné.
+                </Typography>
+              </Grid>
+              
+              <Grid item xs={12}>
+                <Typography variant="body1" sx={{ mb: 1, fontWeight: 600 }}>
+                  3. Vérification d'identité
+                </Typography>
+                <Typography variant="body2" sx={{ color: colors.text.secondary, mb: 2 }}>
+                  Le personnel vérifiera que vous êtes bien la personne autorisée à récupérer l'enfant.
+                </Typography>
+              </Grid>
+              
+              <Grid item xs={12}>
+                <Typography variant="body1" sx={{ mb: 1, fontWeight: 600 }}>
+                  4. Récupération de l'enfant
+                </Typography>
+                <Typography variant="body2" sx={{ color: colors.text.secondary }}>
+                  Une fois l'identité confirmée, l'enfant vous sera confié.
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Container>
+      
+      {/* Bottom Navigation */}
+      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+            switch(newValue) {
+              case 0:
+                navigate('/home');
+                break;
+              case 1:
+                navigate('/map');
+                break;
+              case 2:
+                navigate('/messaging');
+                break;
+              case 3:
+                navigate('/profile');
+                break;
+            }
+          }}
+        >
+          <BottomNavigationAction label="Accueil" icon={<HomeIcon />} />
+          <BottomNavigationAction label="Carte" icon={<MapIcon />} />
+          <BottomNavigationAction 
+            label="Messages" 
+            icon={
+              <Badge badgeContent={2} color="secondary">
+                <MessageIcon />
+              </Badge>
+            } 
+          />
+          <BottomNavigationAction label="Profil" icon={<PersonIcon />} />
+        </BottomNavigation>
+      </Paper>
+    </Box>
+  );
+};
